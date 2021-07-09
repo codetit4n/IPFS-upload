@@ -8,6 +8,7 @@ function App() {
 
   const [buf, setBuf] = useState();
   const [hash, setHash] = useState("");
+  const [loader, setLoader] = useState(false);
 
   const captureFile = (event) => {
     event.stopPropagation()
@@ -23,19 +24,28 @@ function App() {
     const buffer = await Buffer.from(reader.result);
     setBuf(buffer);
   };
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
+    setLoader(true);
     let ipfsId
     const buffer = buf
-    console.log("Uploading on IPFS...");
-    ipfs.add(buffer)
+    await ipfs.add(buffer)
       .then((response) => {
         ipfsId = response[0].hash
-        console.log(ipfsId)
+        console.log("Generated IPFS Hash: ", ipfsId)
         setHash(ipfsId);
       }).catch((err) => {
         console.error(err)
+        alert('An error occured. Please check the console');
       })
+    setLoader(false);
+  }
+  if (loader) {
+    return (
+      <div>
+        <h2>Please wait...Uploading to IPFS</h2>
+      </div>
+    )
   }
   return (
     <div>
