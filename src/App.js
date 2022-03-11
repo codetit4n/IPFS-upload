@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import { Button, Form } from 'react-bootstrap';
+import Loader from './Loader';
 const IPFS = require('ipfs-api');
 const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
 
@@ -9,6 +10,7 @@ function App() {
   const [buf, setBuf] = useState();
   const [hash, setHash] = useState("");
   const [loader, setLoader] = useState(false);
+  const [showLinks, setShowLinks] = useState(false);
 
   const captureFile = (event) => {
     event.stopPropagation()
@@ -38,13 +40,15 @@ function App() {
         console.error(err)
         alert('An error occured. Please check the console');
       })
+    if (ipfsId)
+      setShowLinks(true)
+    else
+      setShowLinks(false)
     setLoader(false);
   }
   if (loader) {
     return (
-      <div>
-        <h2>Please wait...Uploading to IPFS</h2>
-      </div>
+      <Loader />
     )
   }
   return (
@@ -55,9 +59,17 @@ function App() {
         <input type="file" onChange={captureFile} required />
         <Button type="submit">Upload</Button>
       </Form>
-      <h6>IPFS Hash: {hash}</h6>
-      <p>Non clickabe Link: https://ipfs.io/ipfs/{hash}</p>
-      <a href={"https://ipfs.io/ipfs/" + hash}>Clickable Link to view file on IPFS</a>
+      {
+        showLinks ?
+          <div>
+            <p>---------------------------------------------------------------------------------------------</p>
+            <h6>IPFS Hash: {hash}</h6>
+            <p>Non clickabe Link: https://ipfs.io/ipfs/{hash}</p>
+            <a href={"https://ipfs.io/ipfs/" + hash}>Clickable Link to view file on IPFS</a>
+          </div> :
+          <p></p>
+
+      }
     </div>
   );
 }
