@@ -2,8 +2,6 @@
 
 - This is a simple React App using which you can upload any file to IPFS and it will generate an IPFS hash and a link which can be then shared with people or used however you want.
 
-- Also, this project is hosted on IPFS using [fleek.](https://fleek.co/)
-
 ##  🔧 Setting up Local Development
 
 Required: 
