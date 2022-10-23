@@ -2,6 +2,12 @@
 
 - This is a simple React App using which you can upload any file to IPFS and it will generate an IPFS hash and a link which can be then shared with people or used however you want.
 - Since, Infura discontinued its free IPFS service you will need an API key to use it.
+## 🎬 Demo Video 
+
+
+https://user-images.githubusercontent.com/71545386/197403658-6c77614c-cb20-435b-87ec-9dcf0c918a18.mov
+
+
 ##  🔧 Setting up Local Development
 
 Required: 
