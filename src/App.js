@@ -2,11 +2,19 @@ import { useState } from 'react';
 import './App.css';
 import { Button, Form } from 'react-bootstrap';
 import Loader from './Loader';
+import { encode as base64_encode } from 'base-64';
+require('dotenv').config()
 const IPFS = require('ipfs-api');
-const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+
+let secrets = process.env.REACT_APP_INFURA_PROJECT_ID + ':' + process.env.REACT_APP_INFURA_PROJECT_SECRET;
+let encodedSecrets = base64_encode(secrets);
+const ipfs = new IPFS({
+  host: 'ipfs.infura.io', port: 5001, protocol: 'https', headers: {
+    Authorization: 'Basic ' + encodedSecrets
+  }
+});
 
 function App() {
-
   const [buf, setBuf] = useState();
   const [hash, setHash] = useState("");
   const [loader, setLoader] = useState(false);
@@ -38,7 +46,7 @@ function App() {
         setHash(ipfsId);
       }).catch((err) => {
         console.error(err)
-        alert('An error occured. Please check the console');
+        alert('An error occurred. Please check the console');
       })
     if (ipfsId)
       setShowLinks(true)
