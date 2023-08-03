@@ -1,17 +1,23 @@
-import { useState } from 'react';
-import './App.css';
-import { Button, Form } from 'react-bootstrap';
-import Loader from './Loader';
-import { encode as base64_encode } from 'base-64';
-require('dotenv').config()
-const IPFS = require('ipfs-api');
+import { useState } from "react";
+import "./App.css";
+import { Button, Form } from "react-bootstrap";
+import Loader from "./Loader";
+import { encode as base64_encode } from "base-64";
+require("dotenv").config();
+const IPFS = require("ipfs-api");
 
-let secrets = process.env.REACT_APP_INFURA_PROJECT_ID + ':' + process.env.REACT_APP_INFURA_PROJECT_SECRET;
+let secrets =
+  process.env.REACT_APP_INFURA_IPFS_API_KEY +
+  ":" +
+  process.env.REACT_APP_INFURA_IPFS_API_KEY_SECRET;
 let encodedSecrets = base64_encode(secrets);
 const ipfs = new IPFS({
-  host: 'ipfs.infura.io', port: 5001, protocol: 'https', headers: {
-    Authorization: 'Basic ' + encodedSecrets
-  }
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+  headers: {
+    Authorization: "Basic " + encodedSecrets,
+  },
 });
 
 function App() {
@@ -21,12 +27,12 @@ function App() {
   const [showLinks, setShowLinks] = useState(false);
 
   const captureFile = (event) => {
-    event.stopPropagation()
-    event.preventDefault()
-    const file = event.target.files[0]
-    let reader = new window.FileReader()
-    reader.readAsArrayBuffer(file)
-    reader.onloadend = () => convertToBuffer(reader)
+    event.stopPropagation();
+    event.preventDefault();
+    const file = event.target.files[0];
+    let reader = new window.FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = () => convertToBuffer(reader);
   };
 
   const convertToBuffer = async (reader) => {
@@ -37,27 +43,25 @@ function App() {
   const onSubmit = async (event) => {
     event.preventDefault();
     setLoader(true);
-    let ipfsId
-    const buffer = buf
-    await ipfs.add(buffer)
+    let ipfsId;
+    const buffer = buf;
+    await ipfs
+      .add(buffer)
       .then((response) => {
-        ipfsId = response[0].hash
-        console.log("Generated IPFS Hash: ", ipfsId)
+        ipfsId = response[0].hash;
+        console.log("Generated IPFS Hash: ", ipfsId);
         setHash(ipfsId);
-      }).catch((err) => {
-        console.error(err)
-        alert('An error occurred. Please check the console');
       })
-    if (ipfsId)
-      setShowLinks(true)
-    else
-      setShowLinks(false)
+      .catch((err) => {
+        console.error(err);
+        alert("An error occurred. Please check the console");
+      });
+    if (ipfsId) setShowLinks(true);
+    else setShowLinks(false);
     setLoader(false);
-  }
+  };
   if (loader) {
-    return (
-      <Loader />
-    )
+    return <Loader />;
   }
   return (
     <div>
@@ -67,17 +71,20 @@ function App() {
         <input type="file" onChange={captureFile} required />
         <Button type="submit">Upload</Button>
       </Form>
-      {
-        showLinks ?
-          <div>
-            <p>---------------------------------------------------------------------------------------------</p>
-            <h6>IPFS Hash: {hash}</h6>
-            <p>Non clickabe Link: https://ipfs.io/ipfs/{hash}</p>
-            <a href={"https://ipfs.io/ipfs/" + hash}>Clickable Link to view file on IPFS</a>
-          </div> :
-          <p></p>
-
-      }
+      {showLinks ? (
+        <div>
+          <p>
+            ---------------------------------------------------------------------------------------------
+          </p>
+          <h6>IPFS Hash: {hash}</h6>
+          <p>Non clickabe Link: https://ipfs.io/ipfs/{hash}</p>
+          <a href={"https://ipfs.io/ipfs/" + hash}>
+            Clickable Link to view file on IPFS
+          </a>
+        </div>
+      ) : (
+        <p></p>
+      )}
     </div>
   );
 }

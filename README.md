@@ -19,7 +19,7 @@ Required:
 - [Yarn](https://classic.yarnpkg.com/en/docs/install/)
 - [Git](https://git-scm.com/downloads)
 
-Clone the repo and install the node_modules
+1. Clone the repo and install `node_modules`
 
 ```bash
 git clone https://github.com/codeTIT4N/IPFS-upload.git
@@ -27,14 +27,11 @@ cd IPFS-upload
 yarn
 ```
 
-Rename the .env.example to .env and set the following secret variables accordingly:
+2. Rename the `.env.example` file to `.env` and set the secret variables accordingly.
 
-1. REACT_APP_INFURA_PROJECT_ID
-2. REACT_APP_INFURA_PROJECT_SECRET
+> You can get these by signing up for the infura IPFS service. It requires a credit card but they won't charge you until you cross the free 5GB limit.
 
-You can get these by signing up for the infura IPFS service. It requires a credit card but they won't charge you until you cross the free 5GB limit.
-
-To run the application:
+3. Run the application:
 
 ```bash
 yarn start
